@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <%- include('header.ejs') %>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Coupons </h2>
+                    <!-- <p>Add, edit or delete a category</p> -->
+                </div>
+                <div >
+                    <a href="/admin/createCoupon"><button  class="btn btn-primary" id="createCouponBtn">Create Coupon</button></a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S NO.</th>
+                                    <th>Coupon Name</th>
+                                    <th>Description</th>
+                                    <th>Discount In Purchase Amount</th>
+                                    <th>Minimum Purchase Amount</th>
+                                    <th>Maximum Purchase Amount</th>
+                                    <th>Expired on</th>
+                                    <th>Maximum Users</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% coupon.forEach((coupon, index) => { %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><%= coupon.code %></td>
+                                        <td><%= coupon.description %></td>
+                                        <td><%= coupon.discountPercentage %>%</td>
+                                        <td><%= coupon.minimumAmount %></td>
+                                        <td><%= coupon.maximumAmount %></td>
+                                        <td><%= coupon.expirationDate %></td>
+                                        <td><%= coupon.maxUsers %></td>
+                                        <td>
+                                            <% if (coupon.isActive) { %>
+                                                Active
+                                            <% } else { %>
+                                                Inactive
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (coupon.isActive) { %>
+                                                <button class="btn btn-primary" onclick="toggleCoupon('<%= coupon._id %>', false)">Deactivate</button>
+                                            <% } else { %>
+                                                <button class="btn btn-primary" onclick="toggleCoupon('<%= coupon._id %>', true)">Activate</button>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                        <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+            
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="js/vendors/select2.min.js"></script>
+    <script src="js/vendors/perfect-scrollbar.js"></script>
+    <script src="js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Main Script -->
+    <script src="   js/main.js" type="text/javascript"></script>
+
+<script>
+    function toggleCoupon(couponId, isActive) {
+        fetch('/admin/toggleCoupon', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ couponId: couponId, isActive: isActive }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                // Handle non-2xx HTTP responses
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json().catch(() => {
+                // Handle cases where the response is not valid JSON
+                throw new Error('Invalid JSON response');
+            });
+        })
+        .then(data => {
+            if (data.success) {
+                // Reload the page to reflect the updated coupon status
+                location.reload();
+            } else {
+                alert('Failed to toggle coupon status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            alert('Something went wrong!');
+        });
+    }
+</script>
+
+    
+</body>
+
+</html>

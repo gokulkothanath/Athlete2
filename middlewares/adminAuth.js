@@ -1,0 +1,30 @@
+const isLogged = async(req,res,next)=>{
+    try{
+        if(req.session.passport){
+            next()
+        }
+        else{
+            res.redirect('/admin')
+        }     
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+const isLogout = async(req,res,next)=>{
+    try{ 
+        if(req.session.passport){
+            res.redirect('/admin/home');
+        }
+        else{
+            next();
+        }     
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+module.exports={
+    isLogged,
+    isLogout
+}
