@@ -1,4 +1,4 @@
-eKart eKart is a simple e-commerce application built with Node.js and MongoDB, designed to provide basic functionality for an online shopping platform.
+Athlete is a simple e-commerce application built with Node.js and MongoDB, designed to provide basic functionality for an online shopping platform.
 
 Features: User Authentication (Login/Signup) including Google Authentication
 Admin Panel with sale charts and best selling
